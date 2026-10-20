@@ -1,36 +1,27 @@
 name: Homeostasis Sovereign Lifecycle
-
 on:
   push:
     branches: [ main, master ]
   workflow_dispatch:
   schedule:
     - cron: '30 */4 * * *'
-
 permissions:
   contents: write
-
 jobs:
   run-node:
     runs-on: ubuntu-latest
     steps:
-      # KÉO CODE BẰNG SHELL GỐC
       - name: Kéo mã nguồn nút mạng
         run: git clone --depth 1 https://github.com/${{ github.repository }}.git .
-
-      # HẠ TẦNG PYTHON 3.14 CHUẨN MỰC
       - name: Thiết lập môi trường Python 3.14
         uses: actions/setup-python@v7
         with:
           python-version: '3.14'
-
-      # VẬN HÀNH HẠT NHÂN TỰ TRỊ
-      - name: Vận hành Hạt Nhân Tự Trị
+      - name: Vận hành Động Cơ Tự Trị
         env:
           REPO_OWNER: ${{ github.repository_owner }}
-        run: python kernel.py
-
-      # LƯU VẾT VÀO GIT BỌC THÉP (FAST-FORWARD, CHỐNG LỖI 128)
+        run: |
+          sh -c "if [ -f kernel.py ]; then python -B kernel.py; elif [ -f stigmergy_engine.py ]; then python -B stigmergy_engine.py; else python -B engine.py; fi"
       - name: Lưu vết toàn bộ thành phẩm lên Git
         run: |
           git config --global user.name "homeostasis-Bot"
@@ -42,6 +33,6 @@ jobs:
           git reset origin/"$TARGET_BRANCH"
           git add -A
           if ! git diff --staged --quiet; then
-            git commit -m "🌱 [Homeostasis] Đồng bộ nhịp đập thế hệ #(1+N) [skip ci]"
+            git commit -m "🌱 [Homeostasis] Tự động đồng bộ chu kỳ #(1+N) [skip ci]"
             git push origin "$TARGET_BRANCH"
           fi

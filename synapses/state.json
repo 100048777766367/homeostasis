@@ -1,6 +1,6 @@
 {
-    "epoch": 1,
-    "nodes_active": 52,
-    "last_t": 1792498295,
-    "quantum_cid": "d7aa4b807d265e1474c885b176aef9e6d92202930085b7c843d8ed8e88cf83bca170a0836e88bbbae466b14a994469203e7818751020ca3fe26817e2fed4241b"
+    "generation_epoch": 2,
+    "last_t": 1792515856,
+    "quantum_cid": "1ef9d48bb62354c806ffa8c86cbea7e044d6287af935de3d3c36d78c74c7af09867c337ada61a75199061e41d072ea5a53efd29f1299b96a54ab8f9014f429d8",
+    "status": "running"
 }

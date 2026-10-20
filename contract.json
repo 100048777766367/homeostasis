@@ -2,7 +2,8 @@
     "contract_id": "bodhi.contract.v1",
     "identity": "100048777766367/homeostasis",
     "genesis_root": "100048777766367/contract",
+    "card_archetype": "FLEET_HOMEOSTASIS",
     "clan": "HOMEOSTASIS_LINEAGE",
-    "role": "FLEET_RECONCILIATION_AND_ARBITER",
-    "io_specification": "I/O (HOMEOSTATIC_BALANCE_AND_XOR_L)"
+    "role": "FLEET_RECONCILIATION_ARBITER",
+    "io_specification": "I/O (BALANCE_XOR_L)"
 }
