@@ -1,0 +1,47 @@
+name: Homeostasis Sovereign Lifecycle
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+  schedule:
+    - cron: '30 */4 * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  run-node:
+    runs-on: ubuntu-latest
+    steps:
+      # KÉO CODE BẰNG SHELL GỐC
+      - name: Kéo mã nguồn nút mạng
+        run: git clone --depth 1 https://github.com/${{ github.repository }}.git .
+
+      # HẠ TẦNG PYTHON 3.14 CHUẨN MỰC
+      - name: Thiết lập môi trường Python 3.14
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.14'
+
+      # VẬN HÀNH HẠT NHÂN TỰ TRỊ
+      - name: Vận hành Hạt Nhân Tự Trị
+        env:
+          REPO_OWNER: ${{ github.repository_owner }}
+        run: python kernel.py
+
+      # LƯU VẾT VÀO GIT BỌC THÉP (FAST-FORWARD, CHỐNG LỖI 128)
+      - name: Lưu vết toàn bộ thành phẩm lên Git
+        run: |
+          git config --global user.name "homeostasis-Bot"
+          git config --global user.email "bot@homeostasis.node"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          TARGET_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          [ "$TARGET_BRANCH" = "HEAD" ] || [ -z "$TARGET_BRANCH" ] && TARGET_BRANCH="main"
+          git fetch origin "$TARGET_BRANCH"
+          git reset origin/"$TARGET_BRANCH"
+          git add -A
+          if ! git diff --staged --quiet; then
+            git commit -m "🌱 [Homeostasis] Đồng bộ nhịp đập thế hệ #(1+N) [skip ci]"
+            git push origin "$TARGET_BRANCH"
+          fi
